@@ -1,0 +1,1733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HEXA Studio Pro</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icon.png?v=5">
+  <link rel="shortcut icon" href="/favicon.ico?v=5">
+  <link rel="apple-touch-icon" href="/icon.png?v=5">
+  <style>
+    :root {
+      --bg: #090a0c;
+      --surface: #111216;
+      --surface-hover: #16181e;
+      --surface-active: #1c1e26;
+      --border: #20222a;
+      --border-focus: #3f4252;
+      --border-selected: #f4f4f5;
+      --text-main: #f4f4f6;
+      --text-secondary: #8b8f9e;
+      --text-tertiary: #585c6d;
+      --accent: #ffffff;
+      --accent-btn-bg: #ffffff;
+      --accent-btn-text: #090a0c;
+      --badge-bg: #181920;
+      --badge-border: #262833;
+      --badge-text: #a0a4b4;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .app-shell {
+      max-width: 840px;
+      margin: 0 auto;
+      padding: 28px 24px 48px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Top Navigation / Header */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-main);
+    }
+
+    .brand-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .brand-meta h1 {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.2px;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tag-pro {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--badge-bg);
+      border: 1px solid var(--badge-border);
+      color: var(--text-secondary);
+      letter-spacing: 0.3px;
+    }
+
+    .brand-meta p {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 1px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-quiet {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .btn-quiet:hover {
+      background: var(--surface);
+      border-color: var(--border-focus);
+      color: var(--text-main);
+    }
+
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      padding: 6px 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #22c55e;
+    }
+
+    /* Primary Cards */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* URL Input Bar */
+    .input-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 4px 6px 4px 14px;
+      transition: border-color 0.15s ease;
+    }
+
+    .input-row:focus-within {
+      border-color: var(--border-focus);
+    }
+
+    .input-icon {
+      color: var(--text-tertiary);
+      display: flex;
+      align-items: center;
+    }
+
+    .input-row input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text-main);
+      font-size: 13.5px;
+      font-family: inherit;
+      user-select: text;
+    }
+
+    .input-row input::placeholder {
+      color: var(--text-tertiary);
+    }
+
+    .btn-paste {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .btn-paste:hover {
+      background: var(--surface-hover);
+      border-color: var(--border-focus);
+    }
+
+    .btn-clear {
+      background: transparent;
+      border: none;
+      color: var(--text-tertiary);
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      border-radius: 4px;
+    }
+
+    .btn-clear:hover {
+      color: var(--text-main);
+      background: var(--surface);
+    }
+
+    /* Photo Paste & Download Card */
+    .photo-paste-card {
+      background: var(--bg);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      transition: all 0.15s ease;
+      cursor: pointer;
+    }
+
+    .photo-paste-card:hover {
+      background: var(--surface-hover);
+      border-color: var(--border-focus);
+    }
+
+    .photo-paste-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .photo-paste-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+    }
+
+    .photo-paste-meta h4 {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .photo-paste-meta p {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 1px;
+    }
+
+    .btn-paste-photo {
+      background: #ffffff;
+      color: #090a0c;
+      border: none;
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: opacity 0.15s ease;
+    }
+
+    .btn-paste-photo:hover {
+      opacity: 0.9;
+    }
+
+    /* Supported Platforms Chips */
+    .platform-hints {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      font-size: 11px;
+      color: var(--text-tertiary);
+    }
+
+    .chip {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+      border-radius: 4px;
+      color: var(--text-secondary);
+      font-size: 11px;
+    }
+
+    /* Video Metadata Preview */
+    #previewBox {
+      display: none;
+      align-items: center;
+      gap: 16px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+    }
+
+    .preview-thumb {
+      width: 140px;
+      height: 80px;
+      border-radius: 4px;
+      object-fit: cover;
+      background: #000;
+      flex-shrink: 0;
+      border: 1px solid var(--border);
+    }
+
+    .preview-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .preview-platform-tag {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-tertiary);
+    }
+
+    .preview-title {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .preview-sub {
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .preview-sub span {
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    /* Presets Grid */
+    .section-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .presets-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .preset-tile {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .preset-tile:hover {
+      background: var(--surface-hover);
+      border-color: var(--border-focus);
+    }
+
+    .preset-tile.selected {
+      background: var(--surface-active);
+      border-color: var(--border-selected);
+    }
+
+    .preset-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .preset-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .preset-badge {
+      font-size: 9.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      padding: 2px 5px;
+      border-radius: 3px;
+      background: var(--badge-bg);
+      border: 1px solid var(--badge-border);
+      color: var(--text-secondary);
+    }
+
+    .preset-tile.selected .preset-badge {
+      background: #ffffff;
+      color: #090a0c;
+      border-color: #ffffff;
+    }
+
+    .preset-desc {
+      font-size: 11px;
+      color: var(--text-secondary);
+      line-height: 1.35;
+    }
+
+    /* Studio Cut & Creator Tools */
+    .tools-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 4px;
+      margin-bottom: 2px;
+    }
+
+    .tool-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .tool-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .toggle-lbl {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .toggle-lbl input[type="checkbox"] {
+      accent-color: #ffffff;
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+    }
+
+    .quick-cuts {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-micro {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 10.5px;
+      font-weight: 500;
+      font-family: var(--font-mono);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-micro:hover {
+      background: var(--surface-hover);
+      color: var(--text-main);
+      border-color: var(--border-focus);
+    }
+
+    .time-inputs-grid {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-top: 4px;
+    }
+
+    .time-field {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 4px 8px;
+    }
+
+    .time-field span {
+      font-size: 10.5px;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .time-field input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text-main);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      width: 58px;
+      text-align: center;
+    }
+
+    .clip-duration-badge {
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: var(--text-secondary);
+      padding: 4px 8px;
+      border-radius: 4px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+
+    .creator-actions-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 4px 2px;
+    }
+
+    .btn-subtle-action {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 11.5px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .btn-subtle-action:hover {
+      background: var(--surface);
+      color: var(--text-main);
+      border-color: var(--border-focus);
+    }
+
+    /* Action Buttons */
+    .btn-download-primary {
+      width: 100%;
+      background: var(--accent-btn-bg);
+      color: var(--accent-btn-text);
+      border: none;
+      padding: 12px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: opacity 0.15s ease, transform 0.1s ease;
+    }
+
+    .btn-download-primary:hover {
+      opacity: 0.92;
+    }
+
+    .btn-download-primary:active {
+      transform: scale(0.99);
+    }
+
+    /* Progress Module */
+    #progressModule {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+    }
+
+    .progress-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .progress-status {
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .spinner-sm {
+      width: 12px;
+      height: 12px;
+      border: 2px solid var(--border-focus);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .progress-num {
+      font-size: 14px;
+      font-weight: 600;
+      font-family: var(--font-mono);
+      color: var(--text-main);
+    }
+
+    .progress-line-track {
+      width: 100%;
+      height: 5px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-line-fill {
+      width: 0%;
+      height: 100%;
+      background: #ffffff;
+      transition: width 0.2s ease-out;
+    }
+
+    .progress-metrics-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+    }
+
+    .metric-value {
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    .btn-stop {
+      align-self: flex-start;
+      background: transparent;
+      border: 1px solid #7f1d1d;
+      color: #f87171;
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .btn-stop:hover {
+      background: #450a0a;
+    }
+
+    /* Success Card */
+    #successModule {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+    }
+
+    .success-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .success-check {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #14532d;
+      color: #4ade80;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .success-msg h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .success-msg p {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 1px;
+    }
+
+    .success-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-open-file {
+      background: #ffffff;
+      color: #090a0c;
+      border: none;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-open-file:hover {
+      opacity: 0.9;
+    }
+
+    /* History List */
+    .history-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .history-list::-webkit-scrollbar {
+      width: 4px;
+    }
+    .history-list::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 2px;
+    }
+
+    .history-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      gap: 12px;
+    }
+
+    .history-row:hover {
+      background: var(--surface-hover);
+    }
+
+    .history-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .history-icon-box {
+      width: 28px;
+      height: 28px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+
+    .history-text {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .history-title {
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .history-meta {
+      font-size: 10.5px;
+      color: var(--text-tertiary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 1px;
+    }
+
+    .history-fmt {
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .btn-locate {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .btn-locate:hover {
+      color: var(--text-main);
+      border-color: var(--border-focus);
+    }
+
+    .history-empty {
+      text-align: center;
+      padding: 16px;
+      font-size: 12px;
+      color: var(--text-tertiary);
+    }
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(40px);
+      background: #181920;
+      border: 1px solid var(--border-focus);
+      color: var(--text-main);
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 500;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.2s ease;
+      z-index: 1000;
+    }
+    #toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 600px) {
+      .presets-grid { grid-template-columns: 1fr; }
+      #previewBox { flex-direction: column; align-items: flex-start; }
+      .preview-thumb { width: 100%; height: 140px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell">
+
+    <!-- Header -->
+    <header>
+      <div class="brand">
+        <div class="brand-icon" style="width: 40px; height: 40px; padding: 0; overflow: hidden; background: #000; border: 1px solid var(--border); border-radius: 8px;">
+          <img src="/icon.png?v=5" alt="HEXA Icon" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+        </div>
+        <div class="brand-meta">
+          <h1 style="font-size: 16px; font-weight: 700; letter-spacing: -0.3px;">HEXA <span class="tag-pro">Studio Pro</span></h1>
+          <p>High-Precision Media & Clip Engine • Premiere Pro Optimized</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button class="btn-quiet" id="btnOpenDownloads">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+          </svg>
+          Downloads Folder
+        </button>
+        <div class="status-indicator">
+          <div class="dot"></div>
+          Ready
+        </div>
+      </div>
+    </header>
+
+    <!-- URL & Preview Section -->
+    <div class="card">
+      <!-- Instant Photo Grabber (paste.photos style) -->
+      <div class="photo-paste-card" id="photoPasteCard">
+        <div class="photo-paste-left">
+          <div class="photo-paste-badge">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
+              <polyline points="21 15 16 10 5 21"/>
+            </svg>
+          </div>
+          <div class="photo-paste-meta">
+            <h4>Paste & Download Photo</h4>
+            <p>1-Click instant save from clipboard (screenshot, copied image, or photo link)</p>
+          </div>
+        </div>
+        <button type="button" class="btn-paste-photo" id="btnPastePhoto">
+          Paste & Save Photo
+        </button>
+      </div>
+
+      <div class="input-row">
+        <div class="input-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+          </svg>
+        </div>
+        <input type="text" id="urlInput" placeholder="Paste link (YouTube, Shorts, TikTok, X, Instagram, Twitch...)" spellcheck="false" autocomplete="off">
+        <button class="btn-clear" id="btnClear" title="Clear input">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+        <button class="btn-paste" id="btnPaste">
+          Paste
+        </button>
+      </div>
+
+      <div class="platform-hints">
+        <span>Source:</span>
+        <span class="chip">YouTube</span>
+        <span class="chip">Shorts</span>
+        <span class="chip">TikTok</span>
+        <span class="chip">Instagram</span>
+        <span class="chip">X / Twitter</span>
+        <span class="chip">Twitch</span>
+        <span class="chip">Reddit</span>
+      </div>
+
+      <!-- Video Metadata Preview -->
+      <div id="previewBox">
+        <img id="previewThumb" class="preview-thumb" src="" alt="Thumbnail">
+        <div class="preview-info">
+          <div class="preview-platform-tag" id="previewExtractor">Video</div>
+          <div class="preview-title" id="previewTitle">Inspecting link...</div>
+          <div class="preview-sub">
+            <span id="previewAuthor">Creator</span>
+            <span>•</span>
+            <span id="previewDuration">00:00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Presets & Download Trigger -->
+    <div class="card">
+      <div class="section-label">Select Format Preset</div>
+
+      <div class="presets-grid">
+        <!-- Option 1 -->
+        <div class="preset-tile selected" data-format="best_mp4">
+          <div class="preset-top">
+            <span class="preset-name">Best MP4</span>
+            <span class="preset-badge">Default</span>
+          </div>
+          <div class="preset-desc">H.264 + AAC • Direct Premiere Pro import</div>
+        </div>
+
+        <!-- Option 2 -->
+        <div class="preset-tile" data-format="1080p">
+          <div class="preset-top">
+            <span class="preset-name">1080p Full HD</span>
+            <span class="preset-badge">HD</span>
+          </div>
+          <div class="preset-desc">Max 1920x1080 MP4 video with audio</div>
+        </div>
+
+        <!-- Option 3 -->
+        <div class="preset-tile" data-format="4k">
+          <div class="preset-top">
+            <span class="preset-name">4K Ultra HD</span>
+            <span class="preset-badge">2160p</span>
+          </div>
+          <div class="preset-desc">Master quality 4K resolution</div>
+        </div>
+
+        <!-- Option 4 -->
+        <div class="preset-tile" data-format="mp3">
+          <div class="preset-top">
+            <span class="preset-name">Audio (MP3)</span>
+            <span class="preset-badge">320k</span>
+          </div>
+          <div class="preset-desc">Studio 320 kbps high-bitrate stereo</div>
+        </div>
+
+        <!-- Option 5 -->
+        <div class="preset-tile" data-format="wav">
+          <div class="preset-top">
+            <span class="preset-name">Lossless WAV</span>
+            <span class="preset-badge">48kHz</span>
+          </div>
+          <div class="preset-desc">Uncompressed audio master for editing</div>
+        </div>
+
+        <!-- Option 6 -->
+        <div class="preset-tile" data-format="playlist">
+          <div class="preset-top">
+            <span class="preset-name">Full Playlist</span>
+            <span class="preset-badge">Batch</span>
+          </div>
+          <div class="preset-desc">Batch download all playlist videos</div>
+        </div>
+      </div>
+
+      <!-- Studio Cut & Creator Options -->
+      <div class="tools-container">
+        <div class="tool-box">
+          <div class="tool-header-row">
+            <label class="toggle-lbl">
+              <input type="checkbox" id="trimToggle">
+              <span>✂️ Trim / Cut Segment</span>
+            </label>
+            <div class="quick-cuts" id="quickCuts" style="display: none;">
+              <button type="button" class="btn-micro" onclick="setClipSeconds(0, 15)">15s</button>
+              <button type="button" class="btn-micro" onclick="setClipSeconds(0, 30)">30s</button>
+              <button type="button" class="btn-micro" onclick="setClipSeconds(0, 60)">60s</button>
+              <button type="button" class="btn-micro" onclick="resetClip()">Reset</button>
+            </div>
+          </div>
+
+          <div class="time-inputs-grid" id="trimInputsRow" style="display: none;">
+            <div class="time-field">
+              <span>Start</span>
+              <input type="text" id="trimStart" placeholder="00:00" value="00:00">
+            </div>
+            <div class="time-field">
+              <span>End</span>
+              <input type="text" id="trimEnd" placeholder="00:30" value="00:30">
+            </div>
+            <div class="clip-duration-badge" id="clipDurationBadge">Duration: 30s</div>
+          </div>
+        </div>
+
+        <div class="creator-actions-row">
+          <label class="toggle-lbl">
+            <input type="checkbox" id="muteToggle">
+            <span>🔇 Mute Audio (Silent B-Roll)</span>
+          </label>
+
+          <div class="quick-cuts">
+            <button type="button" class="btn-subtle-action" id="btnGrabThumb" title="Save high-res thumbnail image directly">
+              🖼️ Save Thumbnail
+            </button>
+            <button type="button" class="btn-subtle-action" id="btnGrabSubs" title="Download English subtitles (.srt) for Premiere">
+              📝 Subtitles (.srt)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-download-primary" id="btnDownload">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Download
+      </button>
+
+      <!-- Progress Tracking -->
+      <div id="progressModule">
+        <div class="progress-top-row">
+          <div class="progress-status">
+            <div class="spinner-sm"></div>
+            <span id="progStatus">Starting download...</span>
+          </div>
+          <div class="progress-num" id="progPercent">0%</div>
+        </div>
+
+        <div class="progress-line-track">
+          <div class="progress-line-fill" id="progBar"></div>
+        </div>
+
+        <div class="progress-metrics-row">
+          <div>Speed: <span class="metric-value" id="progSpeed">--</span></div>
+          <div>Size: <span class="metric-value" id="progSize">--</span></div>
+          <div>ETA: <span class="metric-value" id="progEta">--</span></div>
+        </div>
+
+        <button class="btn-stop" id="btnCancel">Cancel</button>
+      </div>
+
+      <!-- Success Module -->
+      <div id="successModule">
+        <div class="success-left">
+          <div class="success-check">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+          <div class="success-msg">
+            <h4>Download Complete</h4>
+            <p id="successFileName">File saved to Downloads.</p>
+          </div>
+        </div>
+        <div class="success-actions">
+          <button class="btn-open-file" id="btnOpenCompleted">Show in Folder</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- History -->
+    <div class="card history-container">
+      <div class="section-label">Recent Downloads</div>
+      <div class="history-list" id="historyList">
+        <div class="history-empty">No downloads yet.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="toast">Copied to clipboard</div>
+
+  <script>
+    let selectedFormat = 'best_mp4';
+    let currentVideoMeta = null;
+    let pollTimer = null;
+    let lastCompletedPath = '';
+
+    const urlInput = document.getElementById('urlInput');
+    const btnPaste = document.getElementById('btnPaste');
+    const btnClear = document.getElementById('btnClear');
+    const btnDownload = document.getElementById('btnDownload');
+    const btnOpenDownloads = document.getElementById('btnOpenDownloads');
+    const btnCancel = document.getElementById('btnCancel');
+    const btnOpenCompleted = document.getElementById('btnOpenCompleted');
+
+    const previewBox = document.getElementById('previewBox');
+    const previewThumb = document.getElementById('previewThumb');
+    const previewTitle = document.getElementById('previewTitle');
+    const previewAuthor = document.getElementById('previewAuthor');
+    const previewDuration = document.getElementById('previewDuration');
+    const previewExtractor = document.getElementById('previewExtractor');
+
+    const trimToggle = document.getElementById('trimToggle');
+    const quickCuts = document.getElementById('quickCuts');
+    const trimInputsRow = document.getElementById('trimInputsRow');
+    const trimStart = document.getElementById('trimStart');
+    const trimEnd = document.getElementById('trimEnd');
+    const clipDurationBadge = document.getElementById('clipDurationBadge');
+    const muteToggle = document.getElementById('muteToggle');
+    const btnGrabThumb = document.getElementById('btnGrabThumb');
+    const btnGrabSubs = document.getElementById('btnGrabSubs');
+
+    const photoPasteCard = document.getElementById('photoPasteCard');
+    const btnPastePhoto = document.getElementById('btnPastePhoto');
+
+    const progressModule = document.getElementById('progressModule');
+    const progStatus = document.getElementById('progStatus');
+    const progPercent = document.getElementById('progPercent');
+    const progBar = document.getElementById('progBar');
+    const progSpeed = document.getElementById('progSpeed');
+    const progSize = document.getElementById('progSize');
+    const progEta = document.getElementById('progEta');
+
+    const successModule = document.getElementById('successModule');
+    const successFileName = document.getElementById('successFileName');
+    const historyList = document.getElementById('historyList');
+    const toast = document.getElementById('toast');
+
+    function showToast(msg) {
+      toast.innerText = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    // Instant Photo Grabber (paste.photos style)
+    async function handlePastePhoto() {
+      showToast('Grabbing photo from clipboard...');
+      try {
+        // First try the native backend OS clipboard reader (100% reliable on Windows, zero permission blocks)
+        const res = await fetch('/api/grab-clipboard-photo', { method: 'POST' });
+        const data = await res.json();
+        if (res.status === 200 && data.status === 'ok') {
+          showToast(`✓ Photo saved to Downloads: ${data.filename}`);
+          lastCompletedPath = data.file_path;
+          fetchHistory();
+          return;
+        }
+
+        // If OS clipboard didn't have an image, check browser clipboard if available
+        if (navigator.clipboard && navigator.clipboard.read) {
+          try {
+            const items = await navigator.clipboard.read();
+            for (const item of items) {
+              for (const type of item.types) {
+                if (type.startsWith('image/')) {
+                  const blob = await item.getType(type);
+                  const reader = new FileReader();
+                  reader.onload = async () => {
+                    await uploadPhotoPayload({ image_base64: reader.result });
+                  };
+                  reader.readAsDataURL(blob);
+                  return;
+                }
+              }
+            }
+          } catch (e) {}
+        }
+
+        // Check text URL
+        try {
+          const text = await navigator.clipboard.readText();
+          if (text && text.trim().startsWith('http')) {
+            await uploadPhotoPayload({ url: text.trim() });
+            return;
+          }
+        } catch (e) {}
+
+        showToast(data.error || 'Clipboard empty! Take a screenshot (Win+Shift+S) or copy an image first.');
+      } catch (err) {
+        showToast('Connection error: ' + err.message);
+      }
+    }
+
+    async function uploadPhotoPayload(payload) {
+      showToast('Saving photo to Downloads...');
+      try {
+        const res = await fetch('/api/save-photo', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (res.status === 200 && data.status === 'ok') {
+          showToast(`✓ Photo saved: ${data.filename}`);
+          lastCompletedPath = data.file_path;
+          fetchHistory();
+        } else {
+          showToast(data.error || 'Failed to save photo');
+        }
+      } catch (e) {
+        showToast('Error: ' + e.message);
+      }
+    }
+
+    btnPastePhoto.addEventListener('click', (e) => {
+      e.stopPropagation();
+      handlePastePhoto();
+    });
+    photoPasteCard.addEventListener('click', handlePastePhoto);
+
+    // Global Ctrl+V listener: if user pastes an image file anywhere, save it!
+    window.addEventListener('paste', async (e) => {
+      if (document.activeElement === urlInput && e.clipboardData && e.clipboardData.getData('text')) {
+        return;
+      }
+      if (e.clipboardData && e.clipboardData.items) {
+        for (const item of e.clipboardData.items) {
+          if (item.type.indexOf('image') !== -1) {
+            e.preventDefault();
+            const file = item.getAsFile();
+            const reader = new FileReader();
+            reader.onload = async () => {
+              await uploadPhotoPayload({ image_base64: reader.result });
+            };
+            reader.readAsDataURL(file);
+            return;
+          }
+        }
+      }
+      // If not handled by browser event, delegate to OS clipboard grabber
+      e.preventDefault();
+      await handlePastePhoto();
+    });
+
+    // Drag & Drop image onto photoPasteCard
+    photoPasteCard.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      photoPasteCard.style.borderColor = 'var(--accent)';
+    });
+    photoPasteCard.addEventListener('dragleave', () => {
+      photoPasteCard.style.borderColor = 'var(--border)';
+    });
+    photoPasteCard.addEventListener('drop', (e) => {
+      e.preventDefault();
+      photoPasteCard.style.borderColor = 'var(--border)';
+      if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+        const file = e.dataTransfer.files[0];
+        if (file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = async () => {
+            await uploadPhotoPayload({ image_base64: reader.result });
+          };
+          reader.readAsDataURL(file);
+        } else {
+          showToast('Please drop an image file (PNG, JPG, WebP)');
+        }
+      }
+    });
+
+
+    // Trim / Cut UI logic
+    trimToggle.addEventListener('change', () => {
+      const on = trimToggle.checked;
+      quickCuts.style.display = on ? 'flex' : 'none';
+      trimInputsRow.style.display = on ? 'flex' : 'none';
+      updateClipDuration();
+    });
+
+    function parseTimeSeconds(str) {
+      const parts = str.trim().split(':').map(Number);
+      if (parts.length === 2) return (parts[0] || 0) * 60 + (parts[1] || 0);
+      if (parts.length === 3) return (parts[0] || 0) * 3600 + (parts[1] || 0) * 60 + (parts[2] || 0);
+      return Number(str) || 0;
+    }
+
+    function formatSecs(sec) {
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+
+    function updateClipDuration() {
+      const s = parseTimeSeconds(trimStart.value);
+      const e = parseTimeSeconds(trimEnd.value);
+      const diff = Math.max(0, e - s);
+      clipDurationBadge.innerText = `Duration: ${diff}s`;
+    }
+
+    trimStart.addEventListener('input', updateClipDuration);
+    trimEnd.addEventListener('input', updateClipDuration);
+
+    window.setClipSeconds = function(startSec, durationSec) {
+      trimStart.value = formatSecs(startSec);
+      trimEnd.value = formatSecs(startSec + durationSec);
+      updateClipDuration();
+    };
+
+    window.resetClip = function() {
+      trimStart.value = "00:00";
+      trimEnd.value = "00:30";
+      updateClipDuration();
+    };
+
+    // Grab Thumbnail
+    btnGrabThumb.addEventListener('click', async () => {
+      const thumbUrl = currentVideoMeta ? currentVideoMeta.thumbnail : '';
+      if (!thumbUrl) {
+        showToast('Paste a valid video link first');
+        return;
+      }
+      showToast('Downloading thumbnail...');
+      try {
+        const res = await fetch('/api/download-thumbnail', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            thumbnail: thumbUrl,
+            title: currentVideoMeta ? currentVideoMeta.title : 'Thumbnail'
+          })
+        });
+        const data = await res.json();
+        if (res.status === 200) {
+          showToast('Thumbnail saved to Downloads!');
+          fetchHistory();
+        } else {
+          showToast(data.error || 'Failed to download thumbnail');
+        }
+      } catch (e) {
+        showToast('Error: ' + e.message);
+      }
+    });
+
+    // Grab Subtitles
+    btnGrabSubs.addEventListener('click', async () => {
+      const url = urlInput.value.trim();
+      if (!url) {
+        showToast('Paste a video link first');
+        return;
+      }
+      showToast('Extracting English subtitles (.srt)...');
+      try {
+        const res = await fetch('/api/download-subtitles', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            url: url,
+            title: currentVideoMeta ? currentVideoMeta.title : 'Video'
+          })
+        });
+        const data = await res.json();
+        if (res.status === 200) {
+          showToast('Subtitles saved (.srt) to Downloads!');
+        } else {
+          showToast('No subtitles found');
+        }
+      } catch (e) {
+        showToast('Error: ' + e.message);
+      }
+    });
+
+    // Preset selection
+    document.querySelectorAll('.preset-tile').forEach(tile => {
+      tile.addEventListener('click', () => {
+        document.querySelectorAll('.preset-tile').forEach(t => t.classList.remove('selected'));
+        tile.classList.add('selected');
+        selectedFormat = tile.dataset.format;
+      });
+    });
+
+    // Paste
+    btnPaste.addEventListener('click', async () => {
+      try {
+        const text = await navigator.clipboard.readText();
+        if (text && text.startsWith('http')) {
+          urlInput.value = text.trim();
+          showToast('URL pasted');
+          inspectUrl(urlInput.value);
+        } else {
+          showToast('Clipboard has no URL');
+        }
+      } catch (err) {
+        urlInput.focus();
+        showToast('Press Ctrl+V to paste');
+      }
+    });
+
+    // Clear
+    btnClear.addEventListener('click', () => {
+      urlInput.value = '';
+      previewBox.style.display = 'none';
+      currentVideoMeta = null;
+      urlInput.focus();
+    });
+
+    // URL typing debouncer
+    let inputDebounce = null;
+    urlInput.addEventListener('input', () => {
+      clearTimeout(inputDebounce);
+      const val = urlInput.value.trim();
+      if (val.startsWith('http')) {
+        inputDebounce = setTimeout(() => inspectUrl(val), 500);
+      } else {
+        previewBox.style.display = 'none';
+      }
+    });
+
+    async function inspectUrl(url) {
+      previewBox.style.display = 'flex';
+      previewThumb.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="60"><rect width="100%" height="100%" fill="%23181920"/></svg>';
+      previewTitle.innerText = 'Inspecting video metadata...';
+      previewAuthor.innerText = 'Connecting';
+      previewDuration.innerText = '--:--';
+      previewExtractor.innerText = 'Detecting';
+
+      try {
+        const res = await fetch('/api/info', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url })
+        });
+        const meta = await res.json();
+        currentVideoMeta = meta;
+
+        if (meta.title) previewTitle.innerText = meta.title;
+        if (meta.uploader) previewAuthor.innerText = meta.uploader;
+        if (meta.duration_string) previewDuration.innerText = meta.duration_string;
+        if (meta.extractor) previewExtractor.innerText = meta.extractor;
+        if (meta.thumbnail) {
+          previewThumb.src = meta.thumbnail;
+        }
+      } catch (e) {
+        previewTitle.innerText = url;
+        previewAuthor.innerText = 'Stream';
+      }
+    }
+
+    // Download Trigger
+    btnDownload.addEventListener('click', async () => {
+      const url = urlInput.value.trim();
+      if (!url) {
+        showToast('Paste a video URL first');
+        urlInput.focus();
+        return;
+      }
+
+      btnDownload.disabled = true;
+      btnDownload.style.opacity = '0.5';
+      progressModule.style.display = 'flex';
+      successModule.style.display = 'none';
+      progBar.style.width = '0%';
+      progPercent.innerText = '0%';
+      progStatus.innerText = 'Initializing engine...';
+      progSpeed.innerText = '--';
+      progSize.innerText = '--';
+      progEta.innerText = '--';
+
+      try {
+        const res = await fetch('/api/download', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            url: url,
+            format: selectedFormat,
+            title: currentVideoMeta ? currentVideoMeta.title : 'Video',
+            thumbnail: currentVideoMeta ? currentVideoMeta.thumbnail : '',
+            trim_enabled: trimToggle.checked,
+            start_time: trimStart.value.trim(),
+            end_time: trimEnd.value.trim(),
+            mute_video: muteToggle.checked
+          })
+        });
+        const data = await res.json();
+
+        if (res.status === 200) {
+          startProgressPolling();
+        } else {
+          showToast(data.error || 'Failed to start download');
+          resetDownloadBtn();
+        }
+      } catch (err) {
+        showToast('Connection error: ' + err.message);
+        resetDownloadBtn();
+      }
+    });
+
+
+    function resetDownloadBtn() {
+      btnDownload.disabled = false;
+      btnDownload.style.opacity = '1';
+    }
+
+    function startProgressPolling() {
+      if (pollTimer) clearInterval(pollTimer);
+      pollTimer = setInterval(async () => {
+        try {
+          const res = await fetch('/api/progress');
+          const data = await res.json();
+
+          if (data.state === 'downloading' || data.state === 'converting') {
+            progPercent.innerText = Math.round(data.percent) + '%';
+            progBar.style.width = data.percent + '%';
+            progStatus.innerText = data.status_text || 'Downloading...';
+            progSpeed.innerText = data.speed || '--';
+            progSize.innerText = data.total_size || '--';
+            progEta.innerText = data.eta || '--';
+          } else if (data.state === 'complete') {
+            clearInterval(pollTimer);
+            progressModule.style.display = 'none';
+            successModule.style.display = 'flex';
+            lastCompletedPath = data.file_path;
+            successFileName.innerText = data.file_path ? data.file_path.split('\\').pop() : 'Saved to Downloads folder';
+            resetDownloadBtn();
+            fetchHistory();
+          } else if (data.state === 'error') {
+            clearInterval(pollTimer);
+            progressModule.style.display = 'none';
+            showToast(data.error_message || 'Download failed');
+            resetDownloadBtn();
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }, 500);
+    }
+
+    // Cancel
+    btnCancel.addEventListener('click', async () => {
+      try {
+        await fetch('/api/cancel', { method: 'POST' });
+        showToast('Cancelled');
+      } catch (e) {}
+    });
+
+    // Open Downloads Folder
+    btnOpenDownloads.addEventListener('click', async () => {
+      await fetch('/api/open-downloads', { method: 'POST' });
+    });
+
+    // Open Completed File
+    btnOpenCompleted.addEventListener('click', async () => {
+      await fetch('/api/open-file', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path: lastCompletedPath })
+      });
+    });
+
+    // History
+    async function fetchHistory() {
+      try {
+        const res = await fetch('/api/history');
+        const list = await res.json();
+        if (list && list.length > 0) {
+          historyList.innerHTML = '';
+          list.forEach(item => {
+            const isPhoto = item.format === 'PHOTO';
+            let iconHtml = `
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+              </svg>
+            `;
+            if (item.thumbnail) {
+              iconHtml = `<img src="${item.thumbnail}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 3px;" onerror="this.style.display='none'">`;
+            } else if (isPhoto) {
+              iconHtml = `
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                  <circle cx="8.5" cy="8.5" r="1.5"/>
+                  <polyline points="21 15 16 10 5 21"/>
+                </svg>
+              `;
+            }
+
+            const row = document.createElement('div');
+            row.className = 'history-row';
+            row.innerHTML = `
+              <div class="history-left">
+                <div class="history-icon-box" style="overflow: hidden; padding: 0;">
+                  ${iconHtml}
+                </div>
+                <div class="history-text">
+                  <div class="history-title" title="${item.title || item.file_name}">${item.title || item.file_name}</div>
+                  <div class="history-meta">
+                    <span class="history-fmt">${item.format}</span>
+                    <span>${item.date_str || ''}</span>
+                  </div>
+                </div>
+              </div>
+              <button class="btn-locate" onclick="openHistoryFile('${encodeURIComponent(item.file_path)}')">
+                Locate
+              </button>
+            `;
+            historyList.appendChild(row);
+          });
+        }
+      } catch (e) {}
+    }
+
+    window.openHistoryFile = async function(encodedPath) {
+      const path = decodeURIComponent(encodedPath);
+      await fetch('/api/open-file', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path })
+      });
+    };
+
+    fetchHistory();
+  </script>
+</body>
+</html>
